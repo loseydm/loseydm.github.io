@@ -1,18 +1,24 @@
 ---
 layout: page
-title: About
+title: Publications
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
 
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
+[Learning alters neural activity to simultaneously support memory and action][memory-trace]
 
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
+[How learning unfolds in the brain: toward an optimization view][perspective]
+
+[BrainNet: A Multi-Person Brain-to-Brain Interface for Direct Collaboration Between Brains][brain-net]
+
+[Navigating a 2D Virtual World Using Direct Brain Stimulation][maze]
+
+[Playing 20 Questions with the Mind: Collaborative Problem Solving by Humans Using a Brain-to-Brain Interface][question]
 
 
-[jekyll-organization]: https://github.com/jekyll
+
+[memory-trace]: https://www.biorxiv.org/content/10.1101/2022.07.05.498856v1
+[perspective]: https://www.sciencedirect.com/science/article/pii/S0896627321006772?via%3Dihub
+[brain-net]: https://www.nature.com/articles/s41598-019-41895-7
+[maze]:https://www.frontiersin.org/articles/10.3389/frobt.2016.00072/full
+[question]:https://pubmed.ncbi.nlm.nih.gov/26398267/
