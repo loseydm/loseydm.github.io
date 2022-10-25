@@ -7,7 +7,6 @@ permalink: /publications/
 
 [Learning alters neural activity to simultaneously support memory and action][memory-trace]
 
-
 [How learning unfolds in the brain: toward an optimization view][perspective]
 
 [BrainNet: A Multi-Person Brain-to-Brain Interface for Direct Collaboration Between Brains][brain-net]
