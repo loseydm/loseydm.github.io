@@ -1,11 +1,12 @@
 ---
 layout: page
 title: Publications
-permalink: /about/
+permalink: /publications/
 ---
 
 
 [Learning alters neural activity to simultaneously support memory and action][memory-trace]
+
 
 [How learning unfolds in the brain: toward an optimization view][perspective]
 
