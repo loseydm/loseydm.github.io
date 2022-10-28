@@ -4,7 +4,7 @@ title: Publications
 permalink: /publications/
 ---
 
-Please see my <a href="https://scholar.google.com/citations?user=1-D3mncAAAAJ&hl=en" target="_blank">Google Scholar profile </a>. Alternatively, I have linked a number of my publications below:
+Please see my <a href="https://scholar.google.com/citations?user=1-D3mncAAAAJ&hl=en" target="_blank">Google Scholar profile</a>. Alternatively, I have linked a number of my publications below:
 
 - [Learning alters neural activity to simultaneously support memory and action][memory-trace]
 
