@@ -10,23 +10,23 @@
   --body-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --header-font: 'Lora', Georgia, serif;
 
-  /* Use Beautiful Jekyll theme colors from _config.yml */
   --accent: var(--link-col);
   --accent-hover: var(--hover-col);
-  --accent-dim: rgb(16 185 129 / 0.15);
+  --accent-dim: color-mix(in srgb, var(--link-col) 15%, transparent);
 
   --bg-primary: var(--page-col);
-  --bg-elevated: #1f2937;
-  --bg-card: #172033;
-  --bg-card-hover: #1f2937;
+  --bg-elevated: var(--navbar-border-col);
+  --bg-card: color-mix(in srgb, var(--page-col) 88%, white);
+  --bg-card-hover: color-mix(in srgb, var(--page-col) 84%, white);
 
   --text-primary: var(--text-col);
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
+  --text-secondary: var(--footer-text-col);
+  --text-muted: color-mix(in srgb, var(--text-col) 45%, black);
 
   --border-color: var(--navbar-border-col);
-  --border-subtle: rgb(255 255 255 / 0.06);
+  --border-subtle: color-mix(in srgb, var(--text-col) 8%, transparent);
 }
+
 
 
 
@@ -264,9 +264,10 @@ hr.small {
 }
 
 .venue-badge.top {
-  background: rgba(34, 197, 94, 0.15);
-  color: #4ade80;
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  color: var(--accent);
 }
+
 
 .venue-badge.high {
   background: var(--accent-dim);
