@@ -1,0 +1,502 @@
+/* ========================================
+   Custom Styles — Hanxi Xiao Academic Site
+   Full dark theme overrides for Beautiful Jekyll
+   ======================================== */
+
+/* --- Typography --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --body-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --header-font: 'Lora', Georgia, serif;
+  --accent: #60a5fa;
+  --accent-hover: #93c5fd;
+  --accent-dim: rgba(96, 165, 250, 0.15);
+  --bg-primary: #0f172a;
+  --bg-elevated: #1e293b;
+  --bg-card: #162032;
+  --bg-card-hover: #1e293b;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #1e293b;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+}
+
+body {
+  font-family: var(--body-font);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--header-font);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+p {
+  margin: 1.25rem 0;
+}
+
+a {
+  transition: color 0.2s ease;
+}
+
+/* --- Navbar --- */
+.navbar-custom {
+  font-family: var(--body-font);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+}
+
+.navbar-custom .nav-link {
+  transition: color 0.2s ease, opacity 0.2s ease;
+  opacity: 0.85;
+}
+
+.navbar-custom .nav-link:hover,
+.navbar-custom .nav-link:focus {
+  opacity: 1;
+}
+
+.navbar-custom .navbar-brand {
+  font-family: var(--header-font);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+}
+
+/* Avatar in navbar */
+.avatar-container {
+  border: none;
+}
+
+.avatar-img-border {
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  transition: border-color 0.2s ease;
+}
+
+.avatar-img-border:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* --- Header Section --- */
+.intro-header .page-heading h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.intro-header .page-heading .page-subheading {
+  font-family: var(--body-font);
+  font-weight: 400;
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0.5rem auto 0;
+}
+
+hr.small {
+  border-color: var(--accent);
+  opacity: 0.3;
+}
+
+/* --- Bio Section (Homepage) --- */
+.bio-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.bio-photo {
+  flex-shrink: 0;
+}
+
+.bio-photo img {
+  width: 200px;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--border-subtle);
+}
+
+.bio-text h2 {
+  font-size: 1.75rem;
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+.bio-affiliation {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.bio-affiliation a {
+  color: var(--accent);
+}
+
+.bio-text p {
+  font-size: 1rem;
+  margin: 0.75rem 0;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.bio-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.bio-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.bio-links a:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+.bio-links a i {
+  font-size: 0.875rem;
+}
+
+/* --- Section Headings --- */
+.section-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent-dim);
+}
+
+/* --- Publication Cards --- */
+.pub-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pub-card {
+  display: flex;
+  padding: 1.25rem 0 1.25rem 1.25rem;
+  margin-bottom: 0.75rem;
+  border-left: 3px solid var(--accent);
+  background: var(--bg-card);
+  border-radius: 0 8px 8px 0;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pub-card:hover {
+  background: var(--bg-card-hover);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+}
+
+.pub-content {
+  flex: 1;
+  padding-right: 1.25rem;
+}
+
+.pub-title {
+  font-family: var(--body-font);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin: 0 0 0.35rem 0;
+  line-height: 1.4;
+}
+
+.pub-authors {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin: 0 0 0.25rem 0;
+}
+
+.pub-authors .me {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.pub-venue {
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--text-muted);
+  margin: 0 0 0.6rem 0;
+}
+
+.pub-venue .venue-badge {
+  display: inline-block;
+  font-style: normal;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+
+.venue-badge.top {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+
+.venue-badge.high {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.pub-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pub-links a {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.pub-links a:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+.see-all-link {
+  display: inline-block;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  margin-top: 0.75rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.see-all-link:hover {
+  color: var(--accent-hover);
+}
+
+.see-all-link::after {
+  content: " \2192";
+  transition: transform 0.2s ease;
+}
+
+/* --- News Timeline --- */
+.news-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.news-item {
+  display: flex;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.news-item:last-child {
+  border-bottom: none;
+}
+
+.news-date {
+  flex-shrink: 0;
+  width: 100px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  padding-top: 0.1rem;
+}
+
+.news-content {
+  flex: 1;
+  color: var(--text-secondary);
+}
+
+.news-content a {
+  font-weight: 500;
+}
+
+.news-content strong {
+  color: var(--text-primary);
+}
+
+/* --- Footer --- */
+footer {
+  font-size: 0.8125rem;
+}
+
+footer .beautiful-jekyll-footer {
+  padding: 2rem 0;
+}
+
+footer .theme-by {
+  font-size: 0.6875rem;
+  opacity: 0.5;
+}
+
+/* --- Blog Post List --- */
+.post-preview .post-title {
+  font-family: var(--header-font);
+  color: var(--text-primary);
+}
+
+.post-preview .post-subtitle {
+  font-family: var(--body-font);
+  color: var(--text-secondary);
+}
+
+.post-meta {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* --- Blog intro box (dark theme readable) --- */
+.blog-intro.box-note {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-left: 0.3125rem solid var(--accent);
+}
+
+.blog-intro.box-note strong {
+  color: var(--text-primary);
+}
+
+.blog-intro.box-note a {
+  color: var(--accent);
+}
+
+.blog-intro.box-note a:hover,
+.blog-intro.box-note a:focus {
+  color: var(--accent-hover);
+}
+
+/* --- Dark theme fixes for Beautiful Jekyll elements --- */
+blockquote {
+  color: var(--text-muted);
+}
+
+.jumbotron {
+  background: var(--bg-elevated);
+}
+
+/* Fix code blocks for dark background */
+code {
+  background: var(--bg-elevated);
+  color: var(--accent);
+}
+
+pre {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Fix form inputs if any */
+input, textarea, select {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .bio-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .bio-photo img {
+    width: 160px;
+  }
+
+  .bio-links {
+    justify-content: center;
+  }
+
+  .bio-text h2 {
+    font-size: 1.5rem;
+  }
+
+  .intro-header .page-heading h1 {
+    font-size: 2rem;
+  }
+
+  .news-item {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .news-date {
+    width: auto;
+  }
+
+  .pub-card {
+    padding: 1rem 0.75rem 1rem 1rem;
+  }
+}
+
+/* --- Details / Collapsible Sections --- */
+details {
+  background: var(--bg-card);
+  border-left: 4px solid var(--accent);
+  padding: 0.9rem 1rem 0.9rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  color: var(--text-primary);
+}
+
+details summary {
+  font-weight: 700;
+  color: var(--accent);
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  margin-left: -0.3rem;
+  list-style-position: inside;
+}
+
+details[open] summary {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--accent-dim);
+}
+
+/* --- Utility --- */
+.mt-section {
+  margin-top: 3rem;
+}
+
+.mb-section {
+  margin-bottom: 3rem;
+}
