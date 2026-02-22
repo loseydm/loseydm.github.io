@@ -10,10 +10,10 @@
 ############################
 
 # Name of website
-title: Hanxi Xiao
+title: Darby Losey
 
 # Your name to show in the footer
-author: Hanxi Xiao
+author: Darby Losey
 
 ###############################################
 # --- List of links in the navigation bar --- #
@@ -30,7 +30,7 @@ navbar-links:
 
 # Image to show in the navigation bar - works best with a square image
 # Remove this parameter if you don't want an image in the navbar
-avatar: "/assets/img/headshot.png"
+avatar: "/assets/img/headshot.jpeg"
 
 # By default, the image is cut into a circle. You can disable this behaviour by setting 'round-avatar: false'
 round-avatar: true
@@ -48,11 +48,11 @@ round-avatar: true
 # You can change the order that they show up on the page by changing the order here.
 # Uncomment the links you want to show and add your information to each one.
 social-network-links:
-  email: "xiaoh@pitt.edu"
+  email: "darby.losey@gmail.com"
   # rss: true  # remove this line if you don't want to show an RSS link at the bottom
-  linkedin: hanxi-xiao-1b0282119
-  github: Hanxi-002
-  ORCID: 0000-0003-3849-1696
+  linkedin: https://www.linkedin.com/in/loseydm/
+  github: https://github.com/loseydm
+  # ORCID: 0000-0003-3849-1696
   google-scholar: https://scholar.google.com/citations?user=O2h32WkAAAAJ&hl=en
 #  xing: yourname
 #  stackoverflow: "3943160/daattali"
@@ -125,17 +125,18 @@ navbar-var-length: false
 
 # Personalize the colours in your website. Colour values can be any valid CSS colour
 
-page-col: "#0f172a"
-text-col: "#cbd5e1"
-link-col: "#60a5fa"
-hover-col: "#93c5fd"
-navbar-col: "#0a0f1a"
-navbar-text-col: "#e2e8f0"
-navbar-border-col: "#1e293b"
-footer-col: "#0a0f1a"
-footer-text-col: "#94a3b8"
-footer-link-col: "#94a3b8"
-footer-hover-col: "#93c5fd"
+page-col: "#111827"           # deep slate
+text-col: "#e5e7eb"           # soft light gray
+link-col: "#10b981"           # emerald
+hover-col: "#34d399"          # lighter emerald
+navbar-col: "#0b1220"         # darker header
+navbar-text-col: "#f3f4f6"    # near-white
+navbar-border-col: "#1f2937"  # subtle border
+footer-col: "#0b1220"         # match navbar
+footer-text-col: "#9ca3af"    # muted gray
+footer-link-col: "#a7f3d0"    # pale mint accent
+footer-hover-col: "#6ee7b7"   # brighter mint hover
+
 
 # Alternatively, the navbar, footer, and page background can be set to an image
 # instead of colour
