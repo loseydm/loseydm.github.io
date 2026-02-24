@@ -1,3 +1,4 @@
-# Website creation
+Personal website for Darby Losey, Phd. Website is here: [https://loseydm.github.io/](https://loseydm.github.io/).
 
-I used the work of [Hanxi Xiao](https://hanxi-002.github.io/) as a template. I also use Beautiful Jekyll by [Dean Attali](https://deanattali.com) &middot; [Demo](https://beautifuljekyll.com/).
+# Acknowledgements
+The design of my website is originally based on that of [Hanxi Xiao](https://hanxi-002.github.io/). It also uses Beautiful Jekyll by [Dean Attali](https://deanattali.com).
