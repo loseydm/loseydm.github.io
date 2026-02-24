@@ -21,7 +21,7 @@ author: Darby Losey
 
 navbar-links:
   About: "aboutme"
-  Publications: "publications"
+  # Publications: "publications"
   Blog: "blog"
 
 ################
@@ -50,10 +50,10 @@ round-avatar: true
 social-network-links:
   email: "darby.losey@gmail.com"
   # rss: true  # remove this line if you don't want to show an RSS link at the bottom
-  linkedin: https://www.linkedin.com/in/loseydm/
-  github: https://github.com/loseydm
+  linkedin: loseydm
+  github: loseydm
   # ORCID: 0000-0003-3849-1696
-  google-scholar: https://scholar.google.com/citations?user=O2h32WkAAAAJ&hl=en
+  google-scholar: https://scholar.google.com/citations?hl=en&view_op=list_works&authuser=1&gmla=AF9nlQvokd7t_f4r-NK5ob9-Oc-4xiai3mjeVLU6RSa7QshBy6ZK6urB0WVeqJBQc9sNW3gLFNEboTWRk5NaOQ&user=-BJdRn0AAAAJ
 #  xing: yourname
 #  stackoverflow: "3943160/daattali"
 #  snapchat: deanat78
@@ -78,7 +78,7 @@ social-network-links:
 
 # If you want your website to generate an RSS feed, provide a description
 # The URL for the feed will be https://<your_website>/feed.xml
-rss-description: Hanxi Xiao's research blog on machine learning and computational biology
+rss-description: Darby Losey's research blog
 
 ###########################
 # --- General options --- #
