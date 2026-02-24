@@ -125,15 +125,15 @@ navbar-var-length: false
 
 # Personalize the colours in your website. Colour values can be any valid CSS colour
 
-page-col: "#111827"           # deep slate
-text-col: "#e5e7eb"           # soft light gray
+page-col: "#171717"           # neutral charcoal
+text-col: "#e5e5e5"           # soft light gray
 link-col: "#10b981"           # emerald
 hover-col: "#34d399"          # lighter emerald
-navbar-col: "#0b1220"         # darker header
-navbar-text-col: "#f3f4f6"    # near-white
-navbar-border-col: "#1f2937"  # subtle border
-footer-col: "#0b1220"         # match navbar
-footer-text-col: "#9ca3af"    # muted gray
+navbar-col: "#0f0f0f"         # neutral dark header
+navbar-text-col: "#f5f5f5"    # near-white
+navbar-border-col: "#2a2a2a"  # subtle border
+footer-col: "#0f0f0f"         # match navbar
+footer-text-col: "#a3a3a3"    # muted gray
 footer-link-col: "#a7f3d0"    # pale mint accent
 footer-hover-col: "#6ee7b7"   # brighter mint hover
 
@@ -146,7 +146,7 @@ footer-hover-col: "#6ee7b7"   # brighter mint hover
 #page-img: "/assets/img/bgimage.png"
 
 # Suggest a colour for mobile browsers to use as the browser's theme. This is only supported by a few mobile browsers.
-mobile-theme-col: "#0f172a"
+mobile-theme-col: "#171717"
 
 # For any extra visual customization, you can include additional CSS files in every page on your site. List any custom CSS files here
 site-css:
@@ -294,4 +294,3 @@ plugins:
 
 # Beautiful Jekyll / Dean Attali
 # 2fc73a3a967e97599c9763d05e564189
-

@@ -15,15 +15,15 @@
   --accent-dim: color-mix(in srgb, var(--link-col) 15%, transparent);
 
   --bg-primary: var(--page-col);
-  --bg-elevated: var(--navbar-border-col);
-  --bg-card: color-mix(in srgb, var(--page-col) 88%, white);
-  --bg-card-hover: color-mix(in srgb, var(--page-col) 84%, white);
+  --bg-elevated: #262626;
+  --bg-card: #1f1f1f;
+  --bg-card-hover: #2a2a2a;
 
   --text-primary: var(--text-col);
-  --text-secondary: var(--footer-text-col);
-  --text-muted: color-mix(in srgb, var(--text-col) 45%, black);
+  --text-secondary: #a3a3a3;
+  --text-muted: #737373;
 
-  --border-color: var(--navbar-border-col);
+  --border-color: #2a2a2a;
   --border-subtle: color-mix(in srgb, var(--text-col) 8%, transparent);
 }
 
