@@ -10,10 +10,10 @@
 ############################
 
 # Name of website
-title: Darby Losey
+title: Darby Losey, Phd
 
 # Your name to show in the footer
-author: Darby Losey
+author: Darby Losey, PhD
 
 ###############################################
 # --- List of links in the navigation bar --- #
@@ -22,7 +22,7 @@ author: Darby Losey
 navbar-links:
   # About: "aboutme"
   # Publications: "publications"
-  # Blog: "blog"
+  Blog: "blog"
 
 ################
 # --- Logo --- #
