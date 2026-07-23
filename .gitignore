@@ -1,13 +1,8 @@
-# project
-_site
-.sass-cache
-.vagrant
-
-# general
+# OS junk
 .DS_Store
 Thumbs.db
 ehthumbs.db
 
-Gemfile.lock
-
-beautiful-jekyll-theme-*.gem
+# Drafts — not ready to publish yet (keep locally, don't deploy)
+mamba_123_tutorial.pdf
+paper-lab/mamba/

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HiPPO, Interactively &mdash; Darby&rsquo;s Paper Lab</title>
+  <meta name="description" content="An interactive guide to HiPPO: how state space models compress an entire signal history into a fixed-size state using optimal polynomial projections. The memory theory behind S4 and Mamba.">
+  <meta name="author" content="Darby Losey">
+  <meta name="theme-color" content="#171717">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="HiPPO: Optimal Polynomial Memory for Sequence Models">
+  <meta property="og:description" content="An interactive guide to the memory theory behind S4 and Mamba. Draw a signal and see optimal polynomial memory computed in real time.">
+  <meta property="og:url" content="https://loseydm.github.io/paper-lab/hippo/">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2310b981'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='16' font-weight='700' fill='%23171717' text-anchor='middle'%3EDL%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false}
+          ]});"></script>
+
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <link rel="stylesheet" href="hippo.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="wrap">
+      <a class="navbar-brand" href="../../">Darby Losey, PhD</a>
+      <div class="navbar-links">
+        <a href="../../">About</a>
+        <a href="../" class="active">Darby&rsquo;s Paper Lab</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <article class="article">
+      <header class="article-header">
+        <div class="wrap">
+          <p class="kicker">Darby&rsquo;s Paper Lab &middot; Interactive essay</p>
+          <h1>HiPPO: Optimal Polynomial Memory for Sequence Models</h1>
+          <p class="lead">
+            State space models such as S4 and Mamba read a sequence one step at a time and carry
+            only a small state of fixed size, yet they recall structure from thousands of steps
+            earlier. The theory behind this is <strong>HiPPO</strong>:
+            <em>high-order polynomial projection operators</em>. The construction follows,
+            and the demo below runs it on preset or hand-drawn signals.
+          </p>
+          <div class="paper-cite">
+            <span class="paper-cite-label">The paper</span>
+            <p>
+              <a href="https://arxiv.org/abs/2008.07669" rel="noopener">
+                HiPPO: Recurrent Memory with Optimal Polynomial Projections</a><br>
+              Albert Gu*, Tri Dao*, Stefano Ermon, Atri Rudra, Christopher R&eacute; &middot; NeurIPS 2020
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <div class="wrap article-body">
+
+        <h2>1 &middot; A fixed budget for an unbounded past</h2>
+        <p>
+          A recurrent model consumes its input step by step and carries everything it knows
+          forward in a state vector of fixed size. The past keeps growing; the state does not.
+          Classical RNNs manage this tension with gates, leaks, and initialization schemes, yet
+          still struggle to retain information over long horizons. Attention avoids the problem by
+          keeping every past token and paying a quadratic cost to do so.
+        </p>
+        <p>
+          Given a budget of only \(N\) numbers about the past, HiPPO determines in closed form
+          which \(N\) they should be.
+        </p>
+
+        <h2>2 &middot; Memory as function approximation</h2>
+        <p>
+          Treat the input seen so far as a <em>function</em> \(f\) on \([0, t]\) rather than a
+          list of values. Remembering the past then means keeping a compressed description of
+          that function, and compressing a function reduces to approximating \(f\) by a
+          polynomial.
+        </p>
+        <p>
+          Two choices define the scheme. A <strong>measure</strong> \(\omega(t, x)\) sets how
+          much weight each past moment \(x\) receives; it can emphasize recent history or weight
+          all of it equally. An <strong>orthonormal polynomial basis</strong>
+          \(g_0, g_1, \dots, g_{N-1}\) is then fixed with respect to that measure. The memory is
+          the coefficient vector \(c(t) \in \mathbb{R}^N\) of the least-squares polynomial
+          approximation of the history:
+        </p>
+        \[
+          c_n(t) \;=\; \int f(x)\, g_n(t, x)\, \omega(t, x)\, dx ,
+          \qquad
+          f(x) \;\approx\; \sum_{n=0}^{N-1} c_n(t)\, g_n(t, x) .
+        \]
+        <p>
+          The left equation <em>writes</em> memory, projecting the history onto basis function
+          \(n\). The right equation <em>reads</em> memory: the basis functions mixed with weights
+          \(c_n\) reconstruct the history. The approximation is optimal in the least-squares
+          sense. Under the measure \(\omega\), no other \(N\) numbers formed from linear
+          projections give a smaller error.
+        </p>
+
+        <h2>3 &middot; Updating without recomputing</h2>
+        <p>
+          The projection integral runs over the whole history, and the history grows at every
+          instant, so recomputing \(c(t)\) from scratch at each step would defeat the purpose.
+          The main result of the HiPPO paper is that no recomputation is required. For natural
+          choices of measure the coefficient vector satisfies a
+          <strong>linear ordinary differential equation</strong> driven by the incoming signal,
+        </p>
+        \[
+          \frac{d}{dt}\, c(t) \;=\; A(t)\, c(t) \;+\; B(t)\, f(t),
+        \]
+        <p>
+          where \(A(t) \in \mathbb{R}^{N \times N}\) and \(B(t) \in \mathbb{R}^{N}\) have closed
+          forms. Updating the projected memory of the entire past requires only the current
+          memory and the newest sample. The proof differentiates the projection integral in
+          \(t\), uses the fact that the derivative of a Legendre polynomial is a combination of
+          lower-order Legendre polynomials, and collects the boundary terms. The calculus is
+          routine; the resulting update is linear, online, and exact.
+        </p>
+        <p>
+          For the uniform measure over the whole history, called <strong>HiPPO-LegS</strong>
+          (for <em>scaled Legendre</em>), the operators are:
+        </p>
+        \[
+          \frac{d}{dt}\, c(t) = -\tfrac{1}{t} A\, c(t) + \tfrac{1}{t} B\, f(t),
+          \qquad
+          A_{nk} =
+          \begin{cases}
+            \sqrt{(2n+1)(2k+1)} & n > k \\[2pt]
+            n + 1 & n = k \\[2pt]
+            0 & n < k ,
+          \end{cases}
+          \qquad
+          B_n = \sqrt{2n+1}.
+        \]
+        <p>
+          Note the factor \(1/t\): as the history grows, the dynamics slow in proportion. This
+          makes LegS <em>timescale-equivariant</em>. Stretching the input in time stretches the
+          memory with it, with no timescale hyperparameter to tune.
+        </p>
+
+        <h2 id="demo-heading">4 &middot; The demo</h2>
+        <p>
+          A signal \(f\) streams in from left to right. The model keeps only the \(N\) numbers of
+          \(c(t)\). At each instant the
+          <span class="ink-recon">green curve</span> is the reconstruction \(\hat f\) decoded
+          from those numbers, drawn over the interval that the measure weights (the
+          <span class="ink-measure">shaded band</span>). The three lower panels show the state
+          itself, the basis functions it weights, and the operators \(A\) and \(B\) that drive
+          it.
+        </p>
+        <ul class="howto">
+          <li><strong>Switch the measure</strong> to change what &ldquo;remembering the past&rdquo; means: whole history, sliding window, or exponential decay.</li>
+          <li><strong>Drag the \(N\) slider</strong> to change the memory budget and watch resolution appear and disappear.</li>
+          <li><strong>Draw your own signal</strong> with the pencil button, or scrub time by dragging on the chart.</li>
+          <li><strong>Hover</strong> any panel for exact values.</li>
+        </ul>
+      </div>
+
+      <!-- ================= DEMO ================= -->
+      <section class="demo-breakout" id="demo" aria-label="Interactive HiPPO demonstration">
+        <div class="demo-panel">
+
+          <div class="demo-controls">
+            <div class="control-group control-measure">
+              <span class="control-label">Measure &mdash; how the past is weighted</span>
+              <div class="seg" id="measureSeg" role="group" aria-label="Choose measure">
+                <button type="button" data-measure="legs" class="on">LegS<small>whole history</small></button>
+                <button type="button" data-measure="legt">LegT<small>sliding window</small></button>
+                <button type="button" data-measure="lagt">LagT<small>exponential decay</small></button>
+              </div>
+              <p class="measure-desc" id="measureDesc"></p>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label">Input signal</span>
+              <div class="signal-row">
+                <select id="signalSel" aria-label="Signal preset">
+                  <option value="waves">Gentle waves</option>
+                  <option value="bumps">Isolated bumps</option>
+                  <option value="square">Square wave</option>
+                  <option value="chirp">Chirp (rising frequency)</option>
+                  <option value="damped">Damped oscillation</option>
+                  <option value="drawn">Your drawing</option>
+                </select>
+                <button type="button" id="drawBtn" class="btn" aria-pressed="false" title="Draw a signal on the chart">&#9998; Draw</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label">Memory budget &mdash; <span id="nVal">N = 16</span></span>
+              <input type="range" id="nRange" min="2" max="64" step="1" value="16" aria-label="State size N">
+            </div>
+
+            <div class="control-group" id="paramGroup">
+              <span class="control-label" id="paramLabel">Window length</span>
+              <input type="range" id="pRange" min="0.5" max="6" step="0.1" value="3" aria-label="Measure parameter">
+            </div>
+          </div>
+
+          <div class="chart-header">
+            <div class="chart-legend" aria-hidden="true">
+              <span class="chip"><i class="swatch swatch-sig"></i>signal \(f\)</span>
+              <span class="chip"><i class="swatch swatch-recon"></i>reconstruction \(\hat f\) from \(c(t)\)</span>
+              <span class="chip"><i class="swatch swatch-measure"></i>measure \(\omega\)</span>
+              <label class="chip chip-toggle"><input type="checkbox" id="errChk"> show error \(|f - \hat f|\)</label>
+            </div>
+            <div class="chart-readout">
+              <span id="tVal">t = 0.00 s</span>
+              <span id="errVal" title="Root-mean-square reconstruction error, weighted by the measure">error &mdash;</span>
+            </div>
+          </div>
+
+          <div class="canvas-wrap canvas-main" id="mainWrap">
+            <canvas id="mainCanvas"></canvas>
+            <div class="draw-hint" id="drawHint">Drawing mode &mdash; drag across the chart to reshape the signal</div>
+          </div>
+
+          <div class="transport">
+            <button type="button" id="playBtn" class="btn btn-play" aria-label="Play or pause">&#10074;&#10074;</button>
+            <button type="button" id="restartBtn" class="btn" aria-label="Restart from t = 0">&#8634;</button>
+            <input type="range" id="timeRange" min="0" max="1000" step="1" value="0" aria-label="Scrub time">
+            <select id="speedSel" aria-label="Playback speed">
+              <option value="0.5">0.5&times;</option>
+              <option value="1" selected>1&times;</option>
+              <option value="2">2&times;</option>
+              <option value="4">4&times;</option>
+            </select>
+          </div>
+
+          <div class="sub-panels">
+            <div class="panel">
+              <h3>The state \(c(t)\)</h3>
+              <p class="panel-sub" id="stateSub">These 16 numbers are everything the model remembers.</p>
+              <div class="canvas-wrap"><canvas id="stateCanvas"></canvas></div>
+            </div>
+            <div class="panel">
+              <h3>Weighted basis functions</h3>
+              <p class="panel-sub" id="basisNote">Each coefficient scales one polynomial; their sum is the green reconstruction.</p>
+              <div class="canvas-wrap"><canvas id="basisCanvas"></canvas></div>
+            </div>
+            <div class="panel">
+              <h3>The operators \(A\), \(B\)</h3>
+              <p class="panel-sub" id="matrixCaption">Fixed matrices, determined by the measure alone. Blue positive, red negative.</p>
+              <div class="canvas-wrap"><canvas id="matrixCanvas"></canvas></div>
+            </div>
+          </div>
+
+          <div class="tooltip" id="tooltip" role="status" aria-live="off"></div>
+        </div>
+      </section>
+
+      <div class="wrap article-body">
+        <h2>5 &middot; Things to try</h2>
+        <div class="exp-grid">
+          <div class="exp-card">
+            <h3>The budget is the resolution</h3>
+            <p>With \(N=4\), only the coarse trend survives. Raise \(N\) and each added
+               coefficient resolves one more oscillation of the signal.</p>
+            <button type="button" class="btn exp-load" data-measure="legs" data-signal="waves" data-n="4">Load &rarr;</button>
+          </div>
+          <div class="exp-card">
+            <h3>Graceful forgetting</h3>
+            <p>LegS never abandons the past; it spreads a fixed budget over a growing
+               interval. Early bumps blur while recent ones stay sharp.</p>
+            <button type="button" class="btn exp-load" data-measure="legs" data-signal="bumps" data-n="16">Load &rarr;</button>
+          </div>
+          <div class="exp-card">
+            <h3>Hard forgetting</h3>
+            <p>LegT is all-or-nothing: near-perfect recall inside the window, and a bump that
+               slides past its edge is gone rather than blurred.</p>
+            <button type="button" class="btn exp-load" data-measure="legt" data-signal="bumps" data-n="16" data-p="2.5">Load &rarr;</button>
+          </div>
+          <div class="exp-card">
+            <h3>Smooth recency bias</h3>
+            <p>LagT fades the past exponentially. The square wave&rsquo;s last edge stays
+               crisp while older transitions dissolve. Lower the decay rate to remember longer.</p>
+            <button type="button" class="btn exp-load" data-measure="lagt" data-signal="square" data-n="24" data-p="1">Load &rarr;</button>
+          </div>
+          <div class="exp-card">
+            <h3>Too fast to catch</h3>
+            <p>A chirp accelerates without bound. LegS spreads its budget over all of history
+               and eventually cannot track it; switch to LegT and it locks on inside the
+               window.</p>
+            <button type="button" class="btn exp-load" data-measure="legs" data-signal="chirp" data-n="24">Load &rarr;</button>
+          </div>
+          <div class="exp-card">
+            <h3>Break it yourself</h3>
+            <p>Draw a signal with something hidden in it, a sharp spike or a long silence,
+               and see what each memory keeps and what it discards.</p>
+            <button type="button" class="btn exp-load" data-measure="legs" data-signal="drawn" data-n="24" data-draw="1">Draw &rarr;</button>
+          </div>
+        </div>
+
+        <h2>6 &middot; The three measures</h2>
+        <p>
+          The measure determines the character of the memory. The paper derives operators for
+          several measures; the demo implements the three standard ones.
+        </p>
+        <div class="measure-table-wrap">
+          <table class="measure-table">
+            <thead>
+              <tr><th></th><th>Measure \(\omega\)</th><th>Dynamics</th><th>Character</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>LegS</strong><br><span class="mut">scaled Legendre</span></td>
+                <td>uniform on \([0, t]\)</td>
+                <td>\(\dot c = -\tfrac{1}{t}A c + \tfrac{1}{t}B f\)</td>
+                <td>Never forgets; resolution stretches thinner as history grows. Timescale-robust, parameter-free.</td>
+              </tr>
+              <tr>
+                <td><strong>LegT</strong><br><span class="mut">translated Legendre</span></td>
+                <td>uniform on \([t-\theta,\, t]\)</td>
+                <td>\(\dot c = -\tfrac{1}{\theta}A c + \tfrac{1}{\theta}B f\)</td>
+                <td>Sharp inside a sliding window, amnesia beyond it. Requires choosing \(\theta\). Recovers the Legendre Memory Unit.</td>
+              </tr>
+              <tr>
+                <td><strong>LagT</strong><br><span class="mut">Laguerre</span></td>
+                <td>\(e^{-r(t-x)}\) decay</td>
+                <td>\(\dot c = r(-A c + B f)\)</td>
+                <td>Smooth recency bias with constant dynamics; the &ldquo;leaky&rdquo; memory of classical RNNs, done optimally.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          For LegT the matrix takes the form \(A_{nk} = \sqrt{(2n+1)(2k+1)}\) below the diagonal
+          and \(\sqrt{(2n+1)(2k+1)}\,(-1)^{n-k}\) above it; the alternating upper triangle is
+          visible in the operator panel of the demo. For LagT, \(A\) is the lower-triangular
+          matrix of ones. None of these matrices is learned; each follows from the choice of
+          measure alone.
+        </p>
+
+        <h2>7 &middot; From ODE to RNN</h2>
+        <p>
+          Real data is discrete, so the ODE is discretized with a step \(\Delta t\). The demo
+          fixes \(\Delta t = 0.01\) and uses the bilinear (Tustin) method, the same one used
+          throughout the S4 line of work:
+        </p>
+        \[
+          c_{k+1} \;=\;
+          \underbrace{\left(I - \tfrac{\Delta t}{2} A'\right)^{-1}
+          \left(I + \tfrac{\Delta t}{2} A'\right)}_{\bar A}\, c_k
+          \;+\;
+          \left(I - \tfrac{\Delta t}{2} A'\right)^{-1} \Delta t\, B'\, \cdot f_k ,
+        \]
+        <p>
+          where \(A'\) and \(B'\) denote the continuous operators with their \(1/t\),
+          \(1/\theta\), or \(r\) scaling folded in. The result is a linear recurrence
+          \(c_{k+1} = \bar A c_k + \bar B f_k\), a recurrent network whose weights are fixed and
+          structured rather than learned. The demo runs this recurrence one sample at a time.
+        </p>
+
+        <h2>8 &middot; From HiPPO to S4 and Mamba</h2>
+        <p>
+          HiPPO connects two lines of work. The
+          <a href="https://papers.nips.cc/paper/2019/hash/952285b9b7e7a1be5aa7849f32ffff05-Abstract.html" rel="noopener">Legendre Memory Unit</a>,
+          whose update rule is exactly HiPPO-LegT, came first; the modern state space models
+          came after. <a href="https://arxiv.org/abs/2111.00396" rel="noopener">S4</a> uses the
+          HiPPO-LegS matrix as the <em>initialization</em> of a learned state space layer, and
+          its ablations show the choice is not cosmetic: replacing the HiPPO initialization with
+          a random matrix collapses performance on long-range benchmarks. A later paper,
+          <a href="https://arxiv.org/abs/2206.12037" rel="noopener">How to Train Your HiPPO</a>,
+          generalized the theory and explained why even the diagonal approximations in S4
+          inherit the memory properties.
+          <a href="https://arxiv.org/abs/2312.00752" rel="noopener">Mamba</a> keeps the state
+          space structure and makes the dynamics input-dependent, so the model learns when to
+          write to memory and when to forget, on top of the construction shown here.
+        </p>
+
+        <h2>References</h2>
+        <ol class="refs">
+          <li>Gu, Dao, Ermon, Rudra, R&eacute;. <a href="https://arxiv.org/abs/2008.07669" rel="noopener">HiPPO: Recurrent Memory with Optimal Polynomial Projections</a>. NeurIPS 2020.</li>
+          <li>Voelker, Kaji&#263;, Eliasmith. <a href="https://papers.nips.cc/paper/2019/hash/952285b9b7e7a1be5aa7849f32ffff05-Abstract.html" rel="noopener">Legendre Memory Units: Continuous-Time Representation in Recurrent Neural Networks</a>. NeurIPS 2019.</li>
+          <li>Gu, Goel, R&eacute;. <a href="https://arxiv.org/abs/2111.00396" rel="noopener">Efficiently Modeling Long Sequences with Structured State Spaces (S4)</a>. ICLR 2022.</li>
+          <li>Gu, Johnson, Timalsina, Rudra, R&eacute;. <a href="https://arxiv.org/abs/2206.12037" rel="noopener">How to Train Your HiPPO: State Space Models with Generalized Orthogonal Basis Projections</a>. 2022.</li>
+          <li>Gu, Dao. <a href="https://arxiv.org/abs/2312.00752" rel="noopener">Mamba: Linear-Time Sequence Modeling with Selective State Spaces</a>. 2023.</li>
+        </ol>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <span>&copy; 2026 Darby Losey</span>
+      <div class="footer-social">
+        <a href="https://scholar.google.com/citations?user=-BJdRn0AAAAJ&hl=en" rel="noopener" aria-label="Google Scholar">
+          <svg viewBox="0 0 640 512" aria-hidden="true"><path d="M320 32c-8.1 0-16.1 1.4-23.7 4.1L15.8 137.4C6.3 140.9 0 149.9 0 160s6.3 19.1 15.8 22.6l57.9 20.9C57.3 229.3 48 259.8 48 291.9v28.1c0 28.4-10.8 57.7-22.3 80.8c-6.5 13-13.9 25.8-22.5 37.6C0 442.7-.9 448.3 .9 453.4s6 8.9 11.2 10.2l64 16c4.2 1.1 8.7 .3 12.4-2s6.3-6 7.1-10.3c8.6-42.8 4.3-81.2-2.1-108.7C90.3 344.3 86 329.8 80 316.5V291.9c0-30.2 10.2-58.7 27.9-81.5c12.9-15.5 29.6-28 49.2-35.7l157-61.7c8.2-3.2 17.5 .8 20.7 9s-.8 17.5-9 20.7l-157 61.7c-12.4 4.9-23.3 12.4-32.2 21.6l159.6 57.6c7.6 2.7 15.6 4.1 23.7 4.1s16.1-1.4 23.7-4.1L624.2 182.6c9.5-3.4 15.8-12.5 15.8-22.6s-6.3-19.1-15.8-22.6L343.7 36.1C336.1 33.4 328.1 32 320 32zM128 408c0 35.3 86 72 192 72s192-36.7 192-72L496.7 262.6 354.5 314c-11.1 4-22.8 6-34.5 6s-23.5-2-34.5-6L143.3 262.6 128 408z"/></svg>
+        </a>
+        <a href="https://github.com/loseydm" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 496 512" aria-hidden="true"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3 .3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5 .3-6.2 2.3zm44.2-1.7c-2.9 .7-4.9 2.6-4.6 4.9 .3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3 .7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3 .3 2.9 2.3 3.9 1.6 1 3.6 .7 4.3-.7 .7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3 .7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3 .7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-1.9z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/loseydm/" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="hippo.js"></script>
+</body>
+</html>
