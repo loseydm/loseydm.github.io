@@ -393,29 +393,6 @@ main {
   color: var(--accent-hover);
 }
 
-.lab-soon {
-  margin-top: 2.75rem;
-  border-top: 1px solid var(--border-color);
-  padding-top: 1.5rem;
-}
-
-.lab-soon h3 {
-  font-size: 1rem;
-  margin: 0 0 0.6rem;
-  color: var(--text-secondary);
-}
-
-.lab-soon ul {
-  margin: 0;
-  padding-left: 1.2rem;
-  color: var(--text-muted);
-  font-size: 0.9375rem;
-}
-
-.lab-soon li {
-  margin-bottom: 0.3rem;
-}
-
 @media (max-width: 700px) {
   .lab-card-featured {
     grid-template-columns: 1fr;
